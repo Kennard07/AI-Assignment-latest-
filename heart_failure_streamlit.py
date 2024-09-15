@@ -141,6 +141,14 @@ with st.container():
                 probability = y_prob[0] * 100
                 heart_failure = "Yes" if y_pred[0] == 1 else "No"
 
+            # Display entered details
+            st.subheader("Entered Details")
+            st.write(f"- **Age:** {age}")
+            st.write(f"- **Resting Blood Pressure:** {resting_bp} mm Hg")
+            st.write(f"- **Cholesterol Level:** {cholesterol} mg/dl")
+            st.write(f"- **Maximum Heart Rate:** {max_hr} bpm")
+            st.write(f"- **Resting ECG:** {resting_ecg}")
+
             # Display prediction results
             st.markdown('<div class="section-title">Prediction Results</div>', unsafe_allow_html=True)
             st.write(f"- **Heart Failure Likelihood:** {heart_failure}")
