@@ -71,6 +71,7 @@ st.markdown("""
         font-weight: bold;
         margin-top: 20px;
         margin-bottom: 10px;
+        text-align: center; /* Center-align text */
     }
 
     .stProgressbar {
