@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from joblib import load
+from streamlit.components.v1 import html
 
 # Load the models and preprocessing steps
 heart_failure_model = load('heart_failure_model.joblib')
@@ -15,65 +16,69 @@ feature_selector = heart_failure_model['feature_selector']
 # Set the Streamlit page configuration
 st.set_page_config(page_title='Heart Failure Prediction', page_icon='❤️', layout='wide')
 
-# Custom CSS for styling the app with black background
-st.markdown("""
-    <style>
-    body {
-        background-color: #000000; /* Black */
-        color: #FFFFFF; /* White text */
-        font-family: 'Arial', sans-serif;
-    }
-    
-    .main {
-        padding: 20px;
-        border-radius: 10px;
-    }
-    
-    h1, h2, h3 {
-        color: #FFDDDD; /* Light grey text */
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-    }
+# Custom HTML and CSS
+custom_css = """
+<style>
+body {
+    background-color: #000000; /* Black */
+    color: #FFFFFF; /* White text */
+    font-family: 'Arial', sans-serif;
+}
 
-    .stButton button {
-        background-color: #ff4b4b;
-        color: white;
-        border-radius: 8px;
-        padding: 10px;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
+.main {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #1e1e1e; /* Dark background for main container */
+}
 
-    .stButton button:hover {
-        background-color: #FF6F6F;
-    }
+h1, h2, h3 {
+    color: #00bfae; /* Teal color for headers */
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
 
-    .sidebar .sidebar-content {
-        background-color: #333333; /* Dark grey for sidebar */
-    }
+.stButton button {
+    background-color: #ff4b4b;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
 
-    .stNumberInput input, .stSelectbox select {
-        border-radius: 8px;
-        padding: 12px;
-        font-size: 14px;
-        border: 1px solid #555555;
-        background-color: #222222; /* Dark background for input fields */
-        color: #FFFFFF; /* White text for inputs */
-    }
+.stButton button:hover {
+    background-color: #FF6F6F;
+}
 
-    .section-title {
-        color: #FFDDDD; /* Light grey text */
-        font-size: 22px;
-        font-weight: bold;
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
+.sidebar .sidebar-content {
+    background-color: #333333; /* Dark grey for sidebar */
+}
 
-    .stProgressbar {
-        background-color: #333333; /* Dark grey for progress bar */
-    }
-    </style>
-    """, unsafe_allow_html=True)
+.stNumberInput input, .stSelectbox select {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #555555;
+    background-color: #222222; /* Dark background for input fields */
+    color: #FFFFFF; /* White text for inputs */
+}
+
+.section-title {
+    color: #00bfae; /* Teal color for section titles */
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.stProgressbar {
+    background-color: #333333; /* Dark grey for progress bar */
+}
+</style>
+"""
+
+# Render custom CSS
+html(custom_css, height=0)
 
 # Sidebar for app description or instructions
 st.sidebar.header("About the App")
