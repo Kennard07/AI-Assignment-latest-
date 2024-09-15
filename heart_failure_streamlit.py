@@ -18,64 +18,60 @@ st.set_page_config(page_title='Heart Failure Prediction', page_icon='❤️', la
 # Custom CSS for styling the app with black background
 st.markdown("""
     <style>
-    /* Set black background color */
-    .main {
+    body {
         background-color: #000000; /* Black */
+        color: #FFFFFF; /* White text */
+        font-family: 'Arial', sans-serif;
+    }
+    
+    .main {
         padding: 20px;
         border-radius: 10px;
     }
     
-    /* Title and subtitle styles */
     h1, h2, h3 {
-        color: #FFFFFF; /* White text */
+        color: #FFDDDD; /* Light grey text */
         text-align: center;
         font-family: 'Arial', sans-serif;
     }
 
-    /* Text color styling for content */
-    body, p, div {
-        color: #FFFFFF; /* White text */
-    }
-    
-    /* Button styling */
     .stButton button {
         background-color: #ff4b4b;
         color: white;
         border-radius: 8px;
         padding: 10px;
         font-size: 16px;
+        transition: background-color 0.3s ease;
     }
 
-    /* Sidebar styling */
+    .stButton button:hover {
+        background-color: #FF6F6F;
+    }
+
     .sidebar .sidebar-content {
         background-color: #333333; /* Dark grey for sidebar */
     }
 
-    /* Input field styling */
     .stNumberInput input, .stSelectbox select {
         border-radius: 8px;
         padding: 12px;
         font-size: 14px;
-        border: 1px solid #d1d1d1;
+        border: 1px solid #555555;
         background-color: #222222; /* Dark background for input fields */
         color: #FFFFFF; /* White text for inputs */
     }
 
-    /* Section styling */
     .section-title {
-        color: #FFFFFF; /* White text */
-        font-size: 20px;
+        color: #FFDDDD; /* Light grey text */
+        font-size: 22px;
         font-weight: bold;
         margin-top: 20px;
-    }
-    
-    /* Subtle hover effect for button */
-    .stButton button:hover {
-        background-color: #4CAF50;
-        color: white;
-        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
     }
 
+    .stProgressbar {
+        background-color: #333333; /* Dark grey for progress bar */
+    }
     </style>
     """, unsafe_allow_html=True)
 
