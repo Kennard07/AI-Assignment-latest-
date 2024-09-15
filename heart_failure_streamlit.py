@@ -134,9 +134,6 @@ with st.container():
         input_df_poly = poly.transform(input_df_scaled)
         input_df_selected = feature_selector.transform(input_df_poly)
 
-        # Debugging: Print preprocessed data
-        st.write("Preprocessed Data:", input_df_selected)
-
         # Predict button with progress bar
         if st.button('Predict Heart Failure'):
             with st.spinner('Predicting...'):
