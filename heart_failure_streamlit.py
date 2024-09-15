@@ -15,37 +15,58 @@ feature_selector = heart_failure_model['feature_selector']
 # Set the Streamlit page configuration
 st.set_page_config(page_title='Heart Failure Prediction', page_icon='❤️', layout='wide')
 
-st.title('Heart Failure Prediction System')
-st.write("Enter the details below to predict the likelihood of heart failure using the KNN model.")
-
 # Apply custom CSS styles
 st.markdown("""
     <style>
-    /* Page background color */
+    /* Overall page styling */
     .css-1n76uvr {
         background-color: #f0f8ff; /* Alice Blue */
     }
-    /* Header color */
-    .css-1n76uvr h1 {
+    h1, h2, h3 {
         color: #003366; /* Dark Blue */
+        text-align: center;
     }
-    .css-1n76uvr h2 {
-        color: #003366; /* Dark Blue */
+    .sidebar .sidebar-content {
+        background-color: #f0f8ff; /* Matching background for sidebar */
     }
-    .css-1n76uvr h3 {
-        color: #003366; /* Dark Blue */
+    /* Styling buttons */
+    .stButton button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: large;
+        padding: 10px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Input fields for user data
-age = st.number_input('Age:', min_value=0, max_value=120, step=1, help="Enter the age of the patient.")
-resting_bp = st.number_input('Resting Blood Pressure (mm Hg):', min_value=0, step=1, help="Enter the resting blood pressure.")
-cholesterol = st.number_input('Cholesterol Level (mg/dl):', min_value=0, step=1, help="Enter the cholesterol level.")
-max_hr = st.number_input('Maximum Heart Rate (bpm):', min_value=0, step=1, help="Enter the maximum heart rate.")
-resting_ecg = st.selectbox('Resting ECG:', ['Normal', 'ST', 'LVH'], help="Select the type of resting ECG.")
+# Sidebar for app description or instructions
+st.sidebar.header("About")
+st.sidebar.write("""
+    This app helps predict the likelihood of heart failure based on user inputs like age, resting blood pressure, cholesterol, maximum heart rate, and ECG results. 
+    The prediction is based on a trained K-Nearest Neighbors (KNN) model.
+""")
 
-# Create a DataFrame for the input data
+# Main title and description
+st.title('Heart Failure Prediction System 💓')
+st.write("""
+    Enter the details below to predict the likelihood of heart failure using the KNN model.
+    This tool provides an estimate based on the input factors and suggests the potential risk of heart failure.
+""")
+
+# Input section layout
+st.subheader('Enter Patient Information')
+col1, col2 = st.columns(2)  # Two-column layout
+
+with col1:
+    age = st.number_input('Age:', min_value=0, max_value=120, step=1, help="Enter the age of the patient.")
+    resting_bp = st.number_input('Resting Blood Pressure (mm Hg):', min_value=0, step=1, help="Enter the resting blood pressure.")
+    cholesterol = st.number_input('Cholesterol Level (mg/dl):', min_value=0, step=1, help="Enter the cholesterol level.")
+
+with col2:
+    max_hr = st.number_input('Maximum Heart Rate (bpm):', min_value=0, step=1, help="Enter the maximum heart rate.")
+    resting_ecg = st.selectbox('Resting ECG:', ['Normal', 'ST', 'LVH'], help="Select the type of resting ECG.")
+
+# Data processing and prediction logic
 input_df = pd.DataFrame({
     'Age': [age],
     'RestingBP': [resting_bp],
@@ -54,40 +75,42 @@ input_df = pd.DataFrame({
     'RestingECG': [resting_ecg]
 })
 
-# Handle unknown labels for RestingECG
 if resting_ecg not in label_encoder.classes_:
     st.error(f"Unknown value '{resting_ecg}' for RestingECG. Please select from {label_encoder.classes_}.")
 else:
-    # Transform and scale input data
+    # Preprocessing
     input_df['RestingECG'] = label_encoder.transform(input_df['RestingECG'])
     input_df_scaled = scaler.transform(input_df)
     input_df_poly = poly.transform(input_df_scaled)
     input_df_selected = feature_selector.transform(input_df_poly)
 
-    # Prediction using KNN model
+    # Predict button
     if st.button('Predict Heart Failure'):
         y_pred = knn.predict(input_df_selected)
-        y_prob = knn.predict_proba(input_df_selected)[:, 1]  # Get the probability of heart failure
-
-        # Display results
+        y_prob = knn.predict_proba(input_df_selected)[:, 1]  # Get probability of heart failure
         probability = y_prob[0] * 100  # Convert to percentage
         heart_failure = "Yes" if y_pred[0] == 1 else "No"
 
         # Display entered details
-        st.write(f"### Entered Details")
-        st.write(f"- *Age:* {age}")
-        st.write(f"- *Resting Blood Pressure:* {resting_bp} mm Hg")
-        st.write(f"- *Cholesterol Level:* {cholesterol} mg/dl")
-        st.write(f"- *Maximum Heart Rate:* {max_hr} bpm")
-        st.write(f"- *Resting ECG:* {resting_ecg}")
+        st.subheader("Entered Details")
+        st.write(f"- **Age:** {age}")
+        st.write(f"- **Resting Blood Pressure:** {resting_bp} mm Hg")
+        st.write(f"- **Cholesterol Level:** {cholesterol} mg/dl")
+        st.write(f"- **Maximum Heart Rate:** {max_hr} bpm")
+        st.write(f"- **Resting ECG:** {resting_ecg}")
 
-        # Display prediction result
-        st.write(f"### Prediction Results")
-        st.write(f"- *Heart Failure Likelihood:* {heart_failure}")
-        st.write(f"- *Predicted Probability of Heart Failure:* {probability:.2f}%")
+        # Display prediction results with color-coded message
+        st.subheader("Prediction Results")
+        st.write(f"- **Heart Failure Likelihood:** {heart_failure}")
+        st.write(f"- **Predicted Probability of Heart Failure:** {probability:.2f}%")
 
-        # Additional message based on prediction
         if y_pred[0] == 1:
-            st.warning("Based on the prediction, there is a significant chance that you might develop heart failure.")
+            st.error("⚠️ High risk of heart failure. It is recommended to consult with a healthcare professional.")
         else:
-            st.success("Based on the prediction, it is unlikely that you will develop heart failure.")
+            st.success("✅ Low risk of heart failure. Keep maintaining a healthy lifestyle!")
+
+# Footer with additional resources or credits
+st.sidebar.markdown("---")
+st.sidebar.write("### Useful Resources")
+st.sidebar.write("- [Heart Failure Information](https://www.heart.org/en/health-topics/heart-failure)")
+st.sidebar.write("- [KNN Algorithm](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)")
